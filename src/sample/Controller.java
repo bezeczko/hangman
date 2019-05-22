@@ -15,9 +15,9 @@ import java.util.stream.Collectors;
 public class Controller {
 
     @FXML
-    private Label question, error, category, nickError, end;
+    private Label question, error, category, nickError, end, usedLetterError, revealQuestion;
     @FXML
-    private Button sendButton;
+    private Button sendButton, reset;
     @FXML
     private TextField letter, nick, usedLetters;
     @FXML
@@ -28,14 +28,15 @@ public class Controller {
     private String cat;
     private String q;
     int fails = 0;
+    int score = 0;
 
     private void getRandomQuestion(){
 
         Random random = new Random();
-        int categoryNumber = random.nextInt(3); //todo
-        int questionNumber = random.nextInt(3); //todo
+        int categoryNumber = random.nextInt(5);
+        int questionNumber = random.nextInt(10);
 
-        String[] questions = new String[3];
+        String[] questions = new String[10];
 
         switch(categoryNumber){
             case 0 : {
@@ -46,7 +47,6 @@ public class Controller {
                     int i = 0;
                     while (sc.hasNextLine()) {
                         questions[i] = sc.nextLine();
-                        System.out.println(questions[i]);//todo
                         i++;
                     }
                     cat = "jedzenie";
@@ -57,16 +57,15 @@ public class Controller {
             }
             case 1 : {
                 try {
-                    File file = new File("osoby.txt");
+                    File file = new File("kraje.txt");
                     Scanner sc = new Scanner(file);
 
                     int i = 0;
                     while (sc.hasNextLine()) {
                         questions[i] = sc.nextLine();
-                        System.out.println(questions[i]);//todo
                         i++;
                     }
-                    cat = "osoby";
+                    cat = "kraje";
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -80,10 +79,41 @@ public class Controller {
                     int i = 0;
                     while (sc.hasNextLine()) {
                         questions[i] = sc.nextLine();
-                        System.out.println(questions[i]);//todo
                         i++;
                     }
                     cat = "technologie";
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                break;
+            }
+            case 3 : {
+                try {
+                    File file = new File("rośliny.txt");
+                    Scanner sc = new Scanner(file);
+
+                    int i = 0;
+                    while (sc.hasNextLine()) {
+                        questions[i] = sc.nextLine();
+                        i++;
+                    }
+                    cat = "rośliny";
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                break;
+            }
+            case 4 : {
+                try {
+                    File file = new File("zespoły muzyczne.txt");
+                    Scanner sc = new Scanner(file);
+
+                    int i = 0;
+                    while (sc.hasNextLine()) {
+                        questions[i] = sc.nextLine();
+                        i++;
+                    }
+                    cat = "zespoły muzyczne";
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -102,37 +132,53 @@ public class Controller {
 
     @FXML
     public void initialize() {
-        countScoredNames(); // TO DELETE LATER
+        q="";
+        questionX="";
+        fails = 0;
+        nick.setDisable(false);
+        letter.setDisable(false);
+        sendButton.setDisable(false);
+        usedLetters.setText("");
+        reset.setVisible(false);
+        end.setVisible(false);
+        image.setImage(null);
+        score = 0;
+        revealQuestion.setVisible(false);
         getRandomQuestion();
         category.setText(cat);
 
-        char space = ' ';
         for (int i = 0; i < q.length(); i++) {
-            if(q.charAt(i)==space) questionX +=" ";
+            if(q.charAt(i) == ' ') questionX +=" ";
             else questionX += "-";
         }
+
         question.setText(questionX);
     }
+
 
     @FXML
     public void buttonAction(){
 
         String let = letter.getText().toLowerCase();
         char l = let.charAt(0);
-        q = q.toLowerCase();
 
         if (letter.getText().length()!=1) {
             error.setVisible(true);
+        }
+        else if (usedLetters.getText().contains(let)) {
+            usedLetterError.setVisible(true);
         } else {
             if (nick.getText().length() > 0){
 
                 boolean check = false;
                 error.setVisible(false);
                 nickError.setVisible(false);
+                usedLetterError.setVisible(false);
                 for (int i = 0; i < q.length(); i++) {
-                    if (q.charAt(i) == l) {
-                        questionX = questionX.substring(0, i)+l+questionX.substring(i+1);
+                    if (q.toLowerCase().charAt(i) == l) {
+                        questionX = questionX.substring(0, i)+q.charAt(i)+questionX.substring(i+1);
                         check = true;
+                        score += 5;
                     }
                 }
 
@@ -142,16 +188,33 @@ public class Controller {
                     File file = new File(filePath);
                     Image img = new Image(file.toURI().toString());
                     image.setImage(img);
+                    score -= 2;
                 }
 
                 question.setText(questionX);
-                usedLetters.setText(usedLetters.getText()+","+let.charAt(0));
+                usedLetters.setText(usedLetters.getText()+let.charAt(0)+",");
 
-                if (fails > 6){
-                    end.setText("Przegrałeś/aś");
+                if (questionX.toLowerCase().equals(q.toLowerCase())) {
+                    end.setVisible(true);
+                    score += 10;
+                    end.setText("Wygrałeś/aś, twój wynik to: " + score);
                     sendButton.setDisable(true);
                     nick.setDisable(true);
                     letter.setDisable(true);
+                    reset.setVisible(true);
+                    saveNicknameToFile(nick.getText(), score);
+                }
+
+                if (fails > 6){
+                    end.setVisible(true);
+                    end.setText("Przegrałeś/aś, twój wynik to: " + score);
+                    sendButton.setDisable(true);
+                    nick.setDisable(true);
+                    letter.setDisable(true);
+                    reset.setVisible(true);
+                    saveNicknameToFile(nick.getText(), score);
+                    revealQuestion.setVisible(true);
+                    revealQuestion.setText(q);
                 }
             } else {
                 nickError.setVisible(true);
