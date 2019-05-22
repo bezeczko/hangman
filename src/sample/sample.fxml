@@ -67,8 +67,18 @@
                      </font>
                   </Label>
                   <TextArea fx:id="lastGames" layoutX="245.0" layoutY="52.0" prefHeight="200.0" prefWidth="177.0" />
-                  <TextArea fx:id="playCounter" layoutX="462.0" layoutY="52.0" prefHeight="200.0" prefWidth="177.0" />
+                  <TextArea fx:id="playCounter" layoutX="462.0" layoutY="52.0" prefHeight="172.0" prefWidth="177.0" />
                   <Label layoutX="462.0" layoutY="21.0" text="Liczba gier wg. gracza">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="462.0" layoutY="231.0" text="Liczba gier w ogóle: ">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="allScores" layoutX="603.0" layoutY="231.0" prefHeight="21.0" prefWidth="0.0">
                      <font>
                         <Font size="15.0" />
                      </font>

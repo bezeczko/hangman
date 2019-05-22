@@ -7,6 +7,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.util.Pair;
 
 import java.io.*;
 import java.util.*;
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
 public class Controller {
 
     @FXML
-    private Label question, error, category, nickError, end;
+    private Label question, error, category, nickError, end, allScores;
     @FXML
     private Button sendButton;
     @FXML
@@ -102,7 +103,6 @@ public class Controller {
 
     @FXML
     public void initialize() {
-        countScoredNames(); // TO DELETE LATER
         getRandomQuestion();
         category.setText(cat);
 
@@ -190,13 +190,15 @@ public class Controller {
         return list;
     }
 
+    // metoda zamienia listę graczy na set - pobiera tylko unikatowe elementy
     private Set<String> getUniqueNames(ArrayList<String> list){
-        ArrayList<String> temp = extractNamesFromScore(list);
+        ArrayList<String> temp = extractNamesFromFile(list);
         Set<String> set = new HashSet<String>(temp);
         return set;
     }
 
-    private ArrayList<String> extractNamesFromScore(ArrayList<String> list){
+    // metoda oddzielająca i zwracająca same imiona z pliku bez punktów po przecinku
+    private ArrayList<String> extractNamesFromFile(ArrayList<String> list){
         ArrayList<String> temp = new ArrayList<>();
         String[] parts;
         for(String value : list){
@@ -206,22 +208,65 @@ public class Controller {
         return temp;
     }
 
+    // metoda sortująca mapę po wartościach (odwrotnie)
     private Map<String, Integer> mapSort(Map<String, Integer> map){
         return map.entrySet()
                 .stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
     }
 
+    // metoda zlicza liczbę gier dla poszczególnych graczy, oraz wyświetla te informacje a polu tekstowym
     private void countScoredNames(){
         ArrayList<String> list = readWholeFile("wyniki.txt");
         Map<String, Integer> map = new LinkedHashMap<>();
+        // liczba gier w ogóle
+        int sumOfGames = 0;
         Set<String> users = getUniqueNames(list);
+        // w pętli dodawane są imiona i częstość wystąpienia do mapy, która następnie jest sortowana
         for(String user : users){
-            map.put(user,Collections.frequency(extractNamesFromScore(list), user));
+            map.put(user,Collections.frequency(extractNamesFromFile(list), user));
         }
         map = mapSort(map);
         for(Map.Entry<String,Integer> entry : map.entrySet()){
             playCounter.appendText(entry.getKey() + ": " + entry.getValue() + "\n");
+            sumOfGames += entry.getValue();
+        }
+
+        allScores.setText(Integer.toString(sumOfGames));
+    }
+
+    // metoda wyświetlająca ostatnich graczy i ich punktację
+    private void printLatestGames(){
+        ArrayList<String> list = readWholeFile("wyniki.txt");
+        // odwrócenie listy graczy - najnowsze wpisy są na samym końcu pliku
+        Collections.reverse(new ArrayList(list));
+        String[] element;
+        for(String user : list){
+            element = user.split(",");
+            lastGames.appendText(element[0] + ": " + element[1] + "pkt. \n");
+        }
+    }
+
+    // metoda wyświetlająca wyniki w kolejności od najleszego
+    private void printTopScorers(){
+        ArrayList<String> list = readWholeFile("wyniki.txt");
+        // lista par do której zapisywane będą wyniki w postaci wynik, imię
+        ArrayList<Pair<Integer, String>> listOfPairs = new ArrayList<>();
+        Pair<Integer, String> pair;
+        int i = 1;
+        String[] element;
+        // wszystkie pozycje z pobranej z pliku listy kolejno zapisywane są do par po rozdzieleniu, a następnie pary dodawane są do listy
+        for(String user : list){
+            element = user.split(",");
+            pair = new Pair<>(Integer.parseInt(element[1]), element[0]);
+            listOfPairs.add(pair);
+        }
+        // pary są sortowane wg. wyniku a następnie cała lista jest odwracana (od najwyższego wyniku)
+        listOfPairs.sort(Comparator.comparing(Pair::getKey));
+        Collections.reverse(listOfPairs);
+        for (Pair<Integer, String> p :  listOfPairs) {
+            topScorers.appendText(i + ". " + p.getValue() + ": " + p.getKey() + "pkt. \n");
+            i++;
         }
     }
 
