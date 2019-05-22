@@ -1,0 +1,5 @@
+Jacek,10
+Wojtek,20
+Kuba,40
+Kuba,20
+Kuba,10

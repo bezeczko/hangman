@@ -3,13 +3,14 @@ package sample;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.io.*;
-import java.nio.file.Path;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Controller {
 
@@ -21,6 +22,8 @@ public class Controller {
     private TextField letter, nick, usedLetters;
     @FXML
     private ImageView image;
+    @FXML
+    private TextArea topScorers, lastGames, playCounter;
 
     private String cat;
     private String q;
@@ -99,7 +102,7 @@ public class Controller {
 
     @FXML
     public void initialize() {
-        checkEachScore();
+        countScoredNames(); // TO DELETE LATER
         getRandomQuestion();
         category.setText(cat);
 
@@ -188,19 +191,38 @@ public class Controller {
     }
 
     private Set<String> getUniqueNames(ArrayList<String> list){
-        Set<String> set = new HashSet<String>(list);
+        ArrayList<String> temp = extractNamesFromScore(list);
+        Set<String> set = new HashSet<String>(temp);
         return set;
     }
 
-    private int checkEachScore(){
-        int score = 0;
+    private ArrayList<String> extractNamesFromScore(ArrayList<String> list){
+        ArrayList<String> temp = new ArrayList<>();
+        String[] parts;
+        for(String value : list){
+            parts = value.split(",");
+            temp.add(parts[0]);
+        }
+        return temp;
+    }
+
+    private Map<String, Integer> mapSort(Map<String, Integer> map){
+        return map.entrySet()
+                .stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+    }
+
+    private void countScoredNames(){
         ArrayList<String> list = readWholeFile("wyniki.txt");
+        Map<String, Integer> map = new LinkedHashMap<>();
         Set<String> users = getUniqueNames(list);
         for(String user : users){
-            System.out.println(user + ": " + Collections.frequency(list, user));
+            map.put(user,Collections.frequency(extractNamesFromScore(list), user));
         }
-
-        return score;
+        map = mapSort(map);
+        for(Map.Entry<String,Integer> entry : map.entrySet()){
+            playCounter.appendText(entry.getKey() + ": " + entry.getValue() + "\n");
+        }
     }
 
 }

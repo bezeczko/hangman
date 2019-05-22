@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
@@ -9,7 +14,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="312.0" prefWidth="667.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="312.0" prefWidth="667.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
   <tabs>
     <Tab text="Gra">
       <content>
@@ -48,7 +53,27 @@
     </Tab>
     <Tab text="Wyniki">
       <content>
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <TextArea fx:id="topScorers" layoutX="28.0" layoutY="52.0" prefHeight="200.0" prefWidth="177.0" />
+                  <Label layoutX="28.0" layoutY="21.0" text="Najlepsze wyniki">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="245.0" layoutY="21.0" text="Ostatnie gry">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+                  <TextArea fx:id="lastGames" layoutX="245.0" layoutY="52.0" prefHeight="200.0" prefWidth="177.0" />
+                  <TextArea fx:id="playCounter" layoutX="462.0" layoutY="52.0" prefHeight="200.0" prefWidth="177.0" />
+                  <Label layoutX="462.0" layoutY="21.0" text="Liczba gier wg. gracza">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+               </children></AnchorPane>
       </content>
     </Tab>
   </tabs>
