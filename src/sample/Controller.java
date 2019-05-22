@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class Controller {
 
     @FXML
-    private Label question, error, category, nickError, end, usedLetterError, revealQuestion ,allScores;
+    private Label question, error, category, nickError, end, usedLetterError, revealQuestion, allScores, wrongNickError;
     @FXML
     private Button sendButton, reset;
     @FXML
@@ -30,7 +30,12 @@ public class Controller {
     private String q;
     int fails = 0;
     int score = 0;
+    String questionX = "";
 
+    /**
+     * Funkcja przypisująca losową kategorię do zmiennej cat
+     * i losowe pytanie do zmiennej q
+     */
     private void getRandomQuestion(){
 
         Random random = new Random();
@@ -129,8 +134,10 @@ public class Controller {
 
     }
 
-    String questionX = "";
 
+    /**
+     * Funkcja inicjalizująca grę
+     */
     @FXML
     public void initialize() {
         countScoredNames();
@@ -140,6 +147,7 @@ public class Controller {
         questionX="";
         fails = 0;
         nick.setDisable(false);
+        nick.setText("");
         letter.setDisable(false);
         sendButton.setDisable(false);
         usedLetters.setText("");
@@ -159,26 +167,34 @@ public class Controller {
         question.setText(questionX);
     }
 
-
+    /**
+     * Funkcja obsługjąca naciśnięcie przycisku
+     */
     @FXML
     public void buttonAction(){
+
+        error.setVisible(false);
+        wrongNickError.setVisible(false);
+        nickError.setVisible(false);
+        usedLetterError.setVisible(false);
 
         String let = letter.getText().toLowerCase();
         char l = let.charAt(0);
 
-        if (letter.getText().length()!=1) {
+        if (letter.getText().length()!=1 ) {                                        //wypisanie błędu w przypadku nieprawidłowego
             error.setVisible(true);
-        }
-        else if (usedLetters.getText().contains(let)) {
+        } else if (usedLetters.getText().contains(let)) {                           //wypisanie błędu w przypadku próby użycia tej samej litery
             usedLetterError.setVisible(true);
+        } else if (nick.getText().contains(" ") || nick.getText().contains(",")) {  //wypisanie błędu w przypadku próby użycia nieprawidłowego nicku
+            wrongNickError.setVisible(true);
         } else {
-            if (nick.getText().length() > 0){
-
+            if (nick.getText().length() > 0){                                       //sprawdzenie czy został podany nick
+                nick.setDisable(true);
                 boolean check = false;
                 error.setVisible(false);
                 nickError.setVisible(false);
                 usedLetterError.setVisible(false);
-                for (int i = 0; i < q.length(); i++) {
+                for (int i = 0; i < q.length(); i++) {                              //sprawdzenie czy podana litera występuje haśle i jeśli tak to odsłonięcie tych liter
                     if (q.toLowerCase().charAt(i) == l) {
                         questionX = questionX.substring(0, i)+q.charAt(i)+questionX.substring(i+1);
                         check = true;
@@ -186,8 +202,8 @@ public class Controller {
                     }
                 }
 
-                if(!check){
-                    fails++;
+                if(!check){                                                         //jeśli podana litera była niepoprawna
+                    fails++;                                                        //to zmieniamy obrazek oraz wynik
                     String filePath = fails + ".png";
                     File file = new File(filePath);
                     Image img = new Image(file.toURI().toString());
@@ -198,7 +214,7 @@ public class Controller {
                 question.setText(questionX);
                 usedLetters.setText(usedLetters.getText()+let.charAt(0)+",");
 
-                if (questionX.toLowerCase().equals(q.toLowerCase())) {
+                if (questionX.toLowerCase().equals(q.toLowerCase())) {              //jeśli użytkownik wprowadził wszystkie litery
                     end.setVisible(true);
                     score += 10;
                     end.setText("Wygrałeś/aś, twój wynik to: " + score);
@@ -209,7 +225,7 @@ public class Controller {
                     saveNicknameToFile(nick.getText(), score);
                 }
 
-                if (fails > 6){
+                if (fails > 6){                                                     //jeśli użytkownikowi skończyły się szanse
                     end.setVisible(true);
                     end.setText("Przegrałeś/aś, twój wynik to: " + score);
                     sendButton.setDisable(true);
@@ -220,11 +236,13 @@ public class Controller {
                     revealQuestion.setVisible(true);
                     revealQuestion.setText(q);
                 }
+
             } else {
                 nickError.setVisible(true);
             }
 
         }
+        letter.setText("");
         countScoredNames();
         printTopScorers();
         printLatestGames();

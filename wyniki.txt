@@ -4,6 +4,4 @@ Kuba,40
 Kuba,20
 Kuba,-10
 Wojtek,36
-Tester,6
-wt,33
-wt,43
+Artur,55
