@@ -14,7 +14,7 @@ import java.util.*;
 public class Controller {
 
     @FXML
-    private Label question, error, category, nickError, end, usedLetterError;
+    private Label question, error, category, nickError, end, usedLetterError, revealQuestion;
     @FXML
     private Button sendButton, reset;
     @FXML
@@ -44,7 +44,6 @@ public class Controller {
                     int i = 0;
                     while (sc.hasNextLine()) {
                         questions[i] = sc.nextLine();
-                        System.out.println(questions[i]);//todo
                         i++;
                     }
                     cat = "jedzenie";
@@ -61,7 +60,6 @@ public class Controller {
                     int i = 0;
                     while (sc.hasNextLine()) {
                         questions[i] = sc.nextLine();
-                        System.out.println(questions[i]);//todo
                         i++;
                     }
                     cat = "kraje";
@@ -78,7 +76,6 @@ public class Controller {
                     int i = 0;
                     while (sc.hasNextLine()) {
                         questions[i] = sc.nextLine();
-                        System.out.println(questions[i]);//todo
                         i++;
                     }
                     cat = "technologie";
@@ -89,16 +86,15 @@ public class Controller {
             }
             case 3 : {
                 try {
-                    File file = new File("zwierzęta.txt");
+                    File file = new File("rośliny.txt");
                     Scanner sc = new Scanner(file);
 
                     int i = 0;
                     while (sc.hasNextLine()) {
                         questions[i] = sc.nextLine();
-                        System.out.println(questions[i]);//todo
                         i++;
                     }
-                    cat = "zwierzęta";
+                    cat = "rośliny";
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -112,7 +108,6 @@ public class Controller {
                     int i = 0;
                     while (sc.hasNextLine()) {
                         questions[i] = sc.nextLine();
-                        System.out.println(questions[i]);//todo
                         i++;
                     }
                     cat = "zespoły muzyczne";
@@ -146,6 +141,7 @@ public class Controller {
         end.setVisible(false);
         image.setImage(null);
         score = 0;
+        revealQuestion.setVisible(false);
         getRandomQuestion();
         category.setText(cat);
 
@@ -215,6 +211,8 @@ public class Controller {
                     letter.setDisable(true);
                     reset.setVisible(true);
                     saveNicknameToFile(nick.getText(), score);
+                    revealQuestion.setVisible(true);
+                    revealQuestion.setText(q);
                 }
             } else {
                 nickError.setVisible(true);

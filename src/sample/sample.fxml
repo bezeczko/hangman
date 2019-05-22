@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="355.0" prefWidth="667.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="396.0" prefWidth="667.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
   <tabs>
     <Tab text="Gra">
       <content>
@@ -44,6 +44,11 @@
                   <Button fx:id="reset" layoutX="544.0" layoutY="290.0" mnemonicParsing="false" onAction="#initialize" text="Zagraj ponownie" visible="false" />
                   <Label fx:id="error" layoutX="217.0" layoutY="261.0" text="Podana litera nie jest poprawna" textFill="RED" visible="false" />
                   <Label fx:id="usedLetterError" layoutX="221.0" layoutY="261.0" text="Podana litera została już użyta" textFill="RED" visible="false" />
+                  <Label fx:id="revealQuestion" alignment="CENTER" layoutX="148.0" layoutY="323.0" prefHeight="32.0" prefWidth="388.0" textFill="#00ff0d" visible="false">
+                     <font>
+                        <Font size="28.0" />
+                     </font>
+                  </Label>
                </children></AnchorPane>
       </content>
     </Tab>
