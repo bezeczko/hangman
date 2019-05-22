@@ -1,3 +1,10 @@
-JavaScript
+﻿JavaScript
 Java
 Spring
+Lua
+Bootstrap
+C
+Python
+CSS
+GIT
+Kotlin

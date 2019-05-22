@@ -1,0 +1,13 @@
+sd,10
+k,10
+Kuba,10
+Wojtek,60
+Kuba org,50
+Kuba,41
+Kuba,30
+Kuba,1
+B,35
+Kuba,40
+s,26
+s,46
+s,-9

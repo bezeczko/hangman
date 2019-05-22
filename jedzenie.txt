@@ -1,3 +1,10 @@
-Buritto
-Kebab
+﻿Gulasz
 Pizza
+Kebab
+Czekolada
+Lody
+Banan
+Arbuz
+Zupa
+Owsianka
+Płatki
