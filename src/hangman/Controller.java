@@ -1,4 +1,4 @@
-package sample;
+package hangman;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -95,7 +95,7 @@ public class Controller {
             }
             case 3 : {
                 try {
-                    File file = new File("rośliny.txt");
+                    File file = new File("warzywa.txt");
                     Scanner sc = new Scanner(file);
 
                     int i = 0;

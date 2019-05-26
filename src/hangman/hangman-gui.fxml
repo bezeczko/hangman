@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="396.0" prefWidth="667.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="396.0" prefWidth="667.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hangman.Controller">
   <tabs>
     <Tab text="Gra">
       <content>
@@ -58,7 +58,7 @@
       <content>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
-                  <TextArea fx:id="topScorers" layoutX="28.0" layoutY="52.0" prefHeight="200.0" prefWidth="177.0" />
+                  <TextArea fx:id="topScorers" editable="false" layoutX="28.0" layoutY="52.0" prefHeight="200.0" prefWidth="177.0" />
                   <Label layoutX="28.0" layoutY="21.0" text="Najlepsze wyniki">
                      <font>
                         <Font size="15.0" />
@@ -69,8 +69,8 @@
                         <Font size="15.0" />
                      </font>
                   </Label>
-                  <TextArea fx:id="lastGames" layoutX="245.0" layoutY="52.0" prefHeight="200.0" prefWidth="177.0" />
-                  <TextArea fx:id="playCounter" layoutX="462.0" layoutY="52.0" prefHeight="174.0" prefWidth="177.0" />
+                  <TextArea fx:id="lastGames" editable="false" layoutX="245.0" layoutY="52.0" prefHeight="200.0" prefWidth="177.0" />
+                  <TextArea fx:id="playCounter" editable="false" layoutX="462.0" layoutY="52.0" prefHeight="174.0" prefWidth="177.0" />
                   <Label layoutX="462.0" layoutY="21.0" text="Liczba gier wg. gracza">
                      <font>
                         <Font size="15.0" />

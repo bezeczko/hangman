@@ -1,8 +1,8 @@
 Marchew
 Pietruszka
-Pszenica
-Kwiat
-Drzewo
+Pomidor
+Cukinia
+Ogórek
 Por
 Seler
 Koperek
