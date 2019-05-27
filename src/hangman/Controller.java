@@ -179,9 +179,10 @@ public class Controller {
         usedLetterError.setVisible(false);
 
         String let = letter.getText().toLowerCase();
-        char l = let.charAt(0);
 
-        if (letter.getText().length()!=1 ) {                                        //wypisanie błędu w przypadku nieprawidłowego
+        if (letter.getText().length() == 0) {
+            error.setVisible(true);
+        } else if (letter.getText().length()!=1 ) {                                 //wypisanie błędu w przypadku nieprawidłowej litery
             error.setVisible(true);
         } else if (usedLetters.getText().contains(let)) {                           //wypisanie błędu w przypadku próby użycia tej samej litery
             usedLetterError.setVisible(true);
@@ -189,6 +190,7 @@ public class Controller {
             wrongNickError.setVisible(true);
         } else {
             if (nick.getText().length() > 0){                                       //sprawdzenie czy został podany nick
+                char l = let.charAt(0);
                 nick.setDisable(true);
                 boolean check = false;
                 error.setVisible(false);
