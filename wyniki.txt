@@ -6,3 +6,4 @@ Kuba,-10
 Wojtek,36
 Artur,55
 Kuba,22
+Antoni,-30
