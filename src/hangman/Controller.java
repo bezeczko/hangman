@@ -38,99 +38,32 @@ public class Controller {
      */
     private void getRandomQuestion(){
 
+        File folder = new File("categories/");
+        File[] listOfFiles = folder.listFiles();
+
         Random random = new Random();
-        int categoryNumber = random.nextInt(5);
-        int questionNumber = random.nextInt(10);
 
-        String[] questions = new String[10];
+        int categoryNumber = random.nextInt(listOfFiles.length);
 
-        switch(categoryNumber){
-            case 0 : {
-                try {
-                    File file = new File("jedzenie.txt");
-                    Scanner sc = new Scanner(file);
+        try {
+            File file = new File(listOfFiles[categoryNumber].getPath());
+            Scanner sc = new Scanner(file);
 
-                    int i = 0;
-                    while (sc.hasNextLine()) {
-                        questions[i] = sc.nextLine();
-                        i++;
-                    }
-                    cat = "jedzenie";
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-                break;
+            List<String> questions = new ArrayList<>();
+            while(sc.hasNextLine()){
+                questions.add(sc.nextLine());
             }
-            case 1 : {
-                try {
-                    File file = new File("kraje.txt");
-                    Scanner sc = new Scanner(file);
 
-                    int i = 0;
-                    while (sc.hasNextLine()) {
-                        questions[i] = sc.nextLine();
-                        i++;
-                    }
-                    cat = "kraje";
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-                break;
-            }
-            case 2 : {
-                try {
-                    File file = new File("technologie.txt");
-                    Scanner sc = new Scanner(file);
+            do {
+                int questionNumber = random.nextInt(questions.size());
+                q = questions.get(questionNumber);
+            } while (q.length() > 26);
 
-                    int i = 0;
-                    while (sc.hasNextLine()) {
-                        questions[i] = sc.nextLine();
-                        i++;
-                    }
-                    cat = "technologie";
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-                break;
-            }
-            case 3 : {
-                try {
-                    File file = new File("warzywa.txt");
-                    Scanner sc = new Scanner(file);
+            cat = file.getName().substring(0,file.getName().length()-4);
 
-                    int i = 0;
-                    while (sc.hasNextLine()) {
-                        questions[i] = sc.nextLine();
-                        i++;
-                    }
-                    cat = "rośliny";
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-                break;
-            }
-            case 4 : {
-                try {
-                    File file = new File("zespoły muzyczne.txt");
-                    Scanner sc = new Scanner(file);
-
-                    int i = 0;
-                    while (sc.hasNextLine()) {
-                        questions[i] = sc.nextLine();
-                        i++;
-                    }
-                    cat = "zespoły muzyczne";
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-                break;
-            }
-            default: {
-                System.err.println("Error while getting random category");
-            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
-
-        q = questions[questionNumber];
 
     }
 
