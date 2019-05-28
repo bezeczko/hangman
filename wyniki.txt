@@ -6,3 +6,13 @@ Kuba,-10
 Wojtek,36
 Artur,55
 Kuba,22
+s,55
+s,40
+s,40
+s,45
+s,60
+s,40
+s,45
+s,50
+s,34
+l,58
