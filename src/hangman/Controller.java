@@ -16,11 +16,11 @@ import java.util.stream.Collectors;
 public class Controller {
 
     @FXML
-    private Label question, error, category, nickError, end, usedLetterError, revealQuestion, allScores, wrongNickError;
+    private Label question, error, category, nickError, end, usedLetterError, revealQuestion, allScores, wrongNickError, nameScoreCount;
     @FXML
     private Button sendButton, reset;
     @FXML
-    private TextField letter, nick, usedLetters;
+    private TextField letter, nick, usedLetters, checkName;
     @FXML
     private ImageView image;
     @FXML
@@ -183,7 +183,9 @@ public class Controller {
         printLatestGames();
     }
 
-    // zapisywanie nicku użytkownika do pliku
+    /**
+     * zapisywanie nicku użytkownika do pliku
+     */
     private void saveNicknameToFile(String nick, int score){
         String fileName = "wyniki.txt";
         BufferedWriter writer;
@@ -196,7 +198,9 @@ public class Controller {
         }
     }
 
-    // czytanie wszystkich linii z pliku
+    /**
+     * czytanie wszystkich linii z pliku
+     */
     private ArrayList<String> readWholeFile(String filePath){
         Scanner scanner = null;
         ArrayList<String> list = new ArrayList<String>();
@@ -212,14 +216,18 @@ public class Controller {
         return list;
     }
 
-    // metoda zamienia listę graczy na set - pobiera tylko unikatowe elementy
+    /**
+     * metoda zamienia listę graczy na set - pobiera tylko unikatowe elementy
+     */
     private Set<String> getUniqueNames(ArrayList<String> list){
         ArrayList<String> temp = extractNamesFromFile(list);
         Set<String> set = new HashSet<String>(temp);
         return set;
     }
 
-    // metoda oddzielająca i zwracająca same imiona z pliku bez punktów po przecinku
+    /**
+     * metoda oddzielająca i zwracająca same imiona z pliku bez punktów po przecinku
+     */
     private ArrayList<String> extractNamesFromFile(ArrayList<String> list){
         ArrayList<String> temp = new ArrayList<>();
         String[] parts;
@@ -230,14 +238,19 @@ public class Controller {
         return temp;
     }
 
-    // metoda sortująca mapę po wartościach (odwrotnie)
+    /**
+     * metoda sortująca mapę po wartościach (odwrotnie)
+     */
+    //
     private Map<String, Integer> mapSort(Map<String, Integer> map){
         return map.entrySet()
                 .stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
     }
 
-    // metoda zlicza liczbę gier dla poszczególnych graczy, oraz wyświetla te informacje a polu tekstowym
+    /**
+     * metoda zlicza liczbę gier dla poszczególnych graczy, oraz wyświetla te informacje a polu tekstowym
+     */
     private void countScoredNames(){
         playCounter.clear();
         ArrayList<String> list = readWholeFile("wyniki.txt");
@@ -255,10 +268,14 @@ public class Controller {
             sumOfGames += entry.getValue();
         }
 
+        playCounter.positionCaret(0);
+
         allScores.setText(Integer.toString(sumOfGames));
     }
 
-    // metoda wyświetlająca ostatnich graczy i ich punktację
+    /**
+     * metoda wyświetlająca ostatnich graczy i ich punktację
+     */
     private void printLatestGames(){
         lastGames.clear();
         ArrayList<String> list = readWholeFile("wyniki.txt");
@@ -269,9 +286,13 @@ public class Controller {
             element = user.split(",");
             lastGames.appendText(element[0] + ": " + element[1] + "pkt. \n");
         }
+
+        lastGames.positionCaret(0);
     }
 
-    // metoda wyświetlająca wyniki w kolejności od najleszego
+    /**
+     * metoda wyświetlająca wyniki w kolejności od najleszego
+     */
     private void printTopScorers(){
         topScorers.clear();
         ArrayList<String> list = readWholeFile("wyniki.txt");
@@ -292,6 +313,30 @@ public class Controller {
         for (Pair<Integer, String> p :  listOfPairs) {
             topScorers.appendText(i + ". " + p.getValue() + ": " + p.getKey() + "pkt. \n");
             i++;
+        }
+        topScorers.positionCaret(0);
+    }
+
+    /**
+     * metoda obsługująca przycisk, pozwala na sprawdzenie liczby gier dla wybranego gracza
+     */
+    @FXML
+    private void checkPlayerGameCount(){
+        ArrayList<String> list = readWholeFile("wyniki.txt");
+        Map<String, Integer> map = new LinkedHashMap<>();
+        Set<String> users = getUniqueNames(list);
+        // w pętli dodawane są imiona i częstość wystąpienia do mapy, która następnie jest sortowana
+        for(String user : users){
+            map.put(user,Collections.frequency(extractNamesFromFile(list), user));
+        }
+        map = mapSort(map);
+        for(Map.Entry<String,Integer> entry : map.entrySet()){
+            if(checkName.getText().equals(entry.getKey())){
+                nameScoreCount.setText("Wynik: " + entry.getValue());
+                break;
+            } else{
+                nameScoreCount.setText("Brak wyników");
+            }
         }
     }
 
