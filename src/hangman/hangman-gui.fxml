@@ -69,7 +69,7 @@
                         <Font size="15.0" />
                      </font>
                   </Label>
-                  <Label layoutX="245.0" layoutY="21.0" text="Ostatnie gry">
+                  <Label layoutX="245.0" layoutY="21.0" text="Ostatnie">
                      <font>
                         <Font size="15.0" />
                      </font>
@@ -99,6 +99,13 @@
                   <TextField fx:id="checkName" layoutX="273.0" layoutY="271.0" />
                   <Button layoutX="361.0" layoutY="303.0" mnemonicParsing="false" onAction="#checkPlayerGameCount" text="Sprawdź" />
                   <Label fx:id="nameScoreCount" layoutX="273.0" layoutY="305.0" />
+                  <TextField fx:id="numOfGames" layoutX="306.0" layoutY="19.0" prefHeight="25.0" prefWidth="39.0" />
+                  <Label layoutX="348.0" layoutY="21.0" text="gier">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+                  <Button layoutX="389.0" layoutY="19.0" mnemonicParsing="false" onAction="#showNumOfLatestGames" text="OK" />
                </children></AnchorPane>
       </content>
     </Tab>
