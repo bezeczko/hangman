@@ -10,6 +10,7 @@ import javafx.scene.image.ImageView;
 import javafx.util.Pair;
 
 import java.io.*;
+import java.text.NumberFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -20,7 +21,7 @@ public class Controller {
     @FXML
     private Button sendButton, reset;
     @FXML
-    private TextField letter, nick, usedLetters, checkName;
+    private TextField letter, nick, usedLetters, checkName, numOfGames;
     @FXML
     private ImageView image;
     @FXML
@@ -75,7 +76,6 @@ public class Controller {
     public void initialize() {
         countScoredNames();
         printTopScorers();
-        printLatestGames();
         q="";
         questionX="";
         fails = 0;
@@ -180,7 +180,6 @@ public class Controller {
         letter.setText("");
         countScoredNames();
         printTopScorers();
-        printLatestGames();
     }
 
     /**
@@ -274,23 +273,6 @@ public class Controller {
     }
 
     /**
-     * metoda wyświetlająca ostatnich graczy i ich punktację
-     */
-    private void printLatestGames(){
-        lastGames.clear();
-        ArrayList<String> list = readWholeFile("wyniki.txt");
-        // odwrócenie listy graczy - najnowsze wpisy są na samym końcu pliku
-        Collections.reverse(list);
-        String[] element;
-        for(String user : list){
-            element = user.split(",");
-            lastGames.appendText(element[0] + ": " + element[1] + "pkt. \n");
-        }
-
-        lastGames.positionCaret(0);
-    }
-
-    /**
      * metoda wyświetlająca wyniki w kolejności od najleszego
      */
     private void printTopScorers(){
@@ -340,4 +322,27 @@ public class Controller {
         }
     }
 
+    /**
+     * metoda odpowiedzialna za wyświetlenie tylu ostatnich gier, ile podał użytkownik, wywoływana po użyciu przycisku
+     */
+    @FXML
+    private void showNumOfLatestGames(){
+        lastGames.clear();
+        int entriesCount;
+        try{
+            entriesCount = Integer.parseInt(numOfGames.getText());
+            ArrayList<String> list = readWholeFile("wyniki.txt");
+            // odwrócenie listy graczy - najnowsze wpisy są na samym końcu pliku
+            Collections.reverse(list);
+            String[] element;
+            if(entriesCount >= list.size())
+                entriesCount = list.size();
+            for(int i = 0; i < entriesCount; i++){
+                element = list.get(i).split(",");
+                lastGames.appendText(element[0] + ": " + element[1] + "pkt. \n");
+            }
+        } catch(NumberFormatException | NullPointerException nfe){
+            lastGames.appendText("Niepoprawne dane");
+        }
+    }
 }
